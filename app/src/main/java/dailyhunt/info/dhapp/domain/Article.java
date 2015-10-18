@@ -128,6 +128,13 @@ public class Article {
 
     @Override
     public String toString() {
-        return title;
+        return title + ',' + source;
     }
 }
+
+
+
+
+
+
+

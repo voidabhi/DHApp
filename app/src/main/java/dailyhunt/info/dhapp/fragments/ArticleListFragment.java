@@ -29,16 +29,16 @@ import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 /**
  * Created by voidabhi on 18/10/15.
  */
-public class ArticleListFragment extends Fragment implements View.OnClickListener {
+public class ArticleListFragment extends Fragment {
 
     private static final String DEBUG_TAG = "ArticleListFragment";
 
     private ArticleListAdapter articleListAdapter;
     Spinner categories;
     ListView articleListView;
-    List<Article> articles;
+    ArrayList<Article> articles;
 
-    private List<String> categoriesList;
+    private ArrayList<String> categoriesList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,21 +50,47 @@ public class ArticleListFragment extends Fragment implements View.OnClickListene
         categories = (Spinner)view.findViewById(R.id.spinner_categories);
         categoriesList = new ArrayList<String>();
 
-//        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                ((MaterialNavigationDrawer) getActivity()).setFragmentChild(new PlaceholderFragment(), articles.get(position).getTitle());
-//            }
-//        });
+        DHService.fetchArticles(new ArticlesResponseHandler() {
+            @Override
+            public void onArticlesFetchedResult(Exception e, ArrayList<Article> fetchedArticles) {
+                super.onArticlesFetchedResult(e, fetchedArticles);
+                articles = fetchedArticles;
+                if (e == null) {
+                    for (Article article : articles) {
+                        if (!categoriesList.contains(article.getCategory())) {
+                            categoriesList.add(article.getCategory());
+                        }
+                    }
+
+                    ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,categoriesList);
+                    categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    categories.setAdapter(categoriesAdapter);
+
+                    articleListAdapter = new ArticleListAdapter(getActivity(), articles);
+                    articleListView.setAdapter(articleListAdapter);
+                }
+            }
+        });
+
+        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (articles!=null && articles.size() > 0) {
+                    PlaceholderFragment fragment = new PlaceholderFragment();
+                    fragment.setArticle(articles.get(position));
+                    ((MaterialNavigationDrawer) getActivity()).setFragmentChild(fragment, articles.get(position).getTitle());
+                }
+            }
+        });
 
 //        categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                if (categoriesList.size()>0) {
-////                    fetchArticles(categoriesList.get(position));
-////                } else {
-////                    fetchArticles(null);
-////                }
+//                if (categoriesList.size()>0) {
+//                    fetchArticles(categoriesList.get(position));
+//                } else {
+//                    fetchArticles(null);
+//                }
 //            }
 //        });
 
@@ -91,43 +117,24 @@ public class ArticleListFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        fetchArticles(null);
+        //fetchArticles(null);
 
         return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-       // ((MaterialNavigationDrawer)this.getActivity()).setFragmentChild(new ChildFragment(),"Child Title");
     }
 
     public void fetchArticles(final String category) {
         DHService.fetchArticles(new ArticlesResponseHandler() {
             @Override
-            public void onArticlesFetchedResult(Exception e, ArrayList<Article> articles) {
-                super.onArticlesFetchedResult(e, articles);
-                articles = articles;
+            public void onArticlesFetchedResult(Exception e, ArrayList<Article> fetchedArticles) {
+                super.onArticlesFetchedResult(e, fetchedArticles);
+                articles = fetchedArticles;
                 if (e == null) {
-
-                    if (category== null || category.length() == 0 ) {
-                        for (Article article : articles) {
-                            if (!categoriesList.contains(article.getCategory())) {
-                                categoriesList.add(article.getCategory());
-                            }
-                        }
-
-                        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,categoriesList);
-                        categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        categories.setAdapter(categoriesAdapter);
-                        articleListAdapter = new ArticleListAdapter(getActivity(), articles);
-                    } else {
-                        articleListAdapter = new ArticleListAdapter(getActivity(), new ArrayList<Article>());
+                    articleListAdapter = new ArticleListAdapter(getActivity(), new ArrayList<Article>());
                         for (Article article : articles) {
                             if (!category.equals(article.getCategory())) {
                                 articleListAdapter.add(article);
                             }
                         }
-                    }
 
                     articleListView.setAdapter(articleListAdapter);
                 }

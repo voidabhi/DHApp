@@ -55,7 +55,7 @@ public class PlaceholderFragment extends Fragment {
             btn_bookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getActivity(), "Article Bookmarked", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity().getApplicationContext(), "Article Bookmarked", Toast.LENGTH_SHORT);
                 }
             });
 
@@ -75,6 +75,7 @@ public class PlaceholderFragment extends Fragment {
                     sharingIntent.setType("text/plain");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, article.getSource() + " : " + article.getTitle());
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, article.getUrl());
+                    startActivity(sharingIntent);
                 }
             });
         }

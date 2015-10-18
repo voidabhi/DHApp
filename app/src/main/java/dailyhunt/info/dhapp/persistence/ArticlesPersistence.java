@@ -57,4 +57,12 @@ public class ArticlesPersistence {
         articles.add(article);
         saveArticles(context, articles);
     }
+
+    public static void removeBookmarkedArticle(Context context, Article article) {
+        ArrayList<Article> articles = fetchBookmarkedArticles(context);
+        if (articles != null) {
+            articles.remove(article);
+            saveArticles(context, articles);
+        }
+    }
 }

@@ -22,6 +22,7 @@ import dailyhunt.info.dhapp.MainActivity;
 import dailyhunt.info.dhapp.R;
 import dailyhunt.info.dhapp.adapters.ArticleListAdapter;
 import dailyhunt.info.dhapp.domain.Article;
+import dailyhunt.info.dhapp.persistence.ArticlesPersistence;
 import dailyhunt.info.dhapp.services.DHService;
 import dailyhunt.info.dhapp.services.handlers.ArticlesResponseHandler;
 import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
@@ -36,9 +37,13 @@ public class BookmarkedArticleListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_articles_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_bookmarked_article_list,container,false);
         ListView bookmarkedArticlesListView = (ListView)view.findViewById(R.id.bookmarked_article_list);
-
+        ArrayList<Article> articles = ArticlesPersistence.fetchBookmarkedArticles(getActivity().getApplicationContext());
+        if (articles!=null) {
+            ArticleListAdapter articleListAdapter = new ArticleListAdapter(getActivity(), articles);
+            bookmarkedArticlesListView.setAdapter(articleListAdapter);
+        }
         return view;
     }
 }

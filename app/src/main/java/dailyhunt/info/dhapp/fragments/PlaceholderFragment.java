@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
 
 import dailyhunt.info.dhapp.R;
 import dailyhunt.info.dhapp.domain.Article;
+import dailyhunt.info.dhapp.persistence.ArticlesPersistence;
 
 /**
  * Created by voidabhi on 18/10/15.
@@ -55,6 +56,7 @@ public class PlaceholderFragment extends Fragment {
             btn_bookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ArticlesPersistence.saveBookmarkedArticle(getActivity().getApplicationContext(), article);
                     Toast.makeText(getActivity().getApplicationContext(), "Article Bookmarked", Toast.LENGTH_SHORT);
                 }
             });

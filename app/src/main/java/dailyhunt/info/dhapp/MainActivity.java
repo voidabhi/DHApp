@@ -14,6 +14,7 @@ import javax.xml.transform.Source;
 
 import dailyhunt.info.dhapp.domain.Article;
 import dailyhunt.info.dhapp.fragments.ArticleListFragment;
+import dailyhunt.info.dhapp.fragments.BookmarkedArticleListFragment;
 import dailyhunt.info.dhapp.services.DHService;
 import dailyhunt.info.dhapp.services.handlers.ArticlesResponseHandler;
 import dailyhunt.info.dhapp.services.handlers.SourceCountHandler;
@@ -31,6 +32,7 @@ public class MainActivity extends MaterialNavigationDrawer {
 
         this.setDrawerHeaderImage(R.drawable.ic_launcher);
         this.addSection(this.newSection("Articles", new ArticleListFragment()));
+        this.addSection(this.newSection("Bookmarks", new BookmarkedArticleListFragment()));
 
     }
 

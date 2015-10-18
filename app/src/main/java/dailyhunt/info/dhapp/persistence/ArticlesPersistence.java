@@ -9,9 +9,12 @@ import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 
 import dailyhunt.info.dhapp.domain.Article;
 
@@ -22,23 +25,36 @@ public class ArticlesPersistence {
 
     private static final String TAG = "bookmarked_articles";
 
-    public static void saveBookmarkedArticle(Context context, Article article) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPrefs.edit();
+    public static void saveArticles(Context context, ArrayList<Article> articles) {
+        SharedPreferences settings;
+        SharedPreferences.Editor editor;
+        settings = context.getSharedPreferences("dhapp",Context.MODE_PRIVATE);
+        editor = settings.edit();
         Gson gson = new Gson();
-
-        String json = gson.toJson(article);
-
-        editor.putString(TAG, json);
+        String jsonFavorites = gson.toJson(articles);
+        editor.putString(TAG, jsonFavorites);
         editor.commit();
     }
 
-    public static ArrayList<Article> fetchBookmarkedArticles(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Gson gson = new Gson();
-        String json = sharedPrefs.getString(TAG, null);
-        Type type = new TypeToken<ArrayList<Article>>() {}.getType();
-        ArrayList<Article> articles = gson.fromJson(json, type);
-        return articles;
+    public static ArrayList fetchBookmarkedArticles(Context context) {
+        SharedPreferences settings;
+        List<Article> articles;
+        settings = context.getSharedPreferences("dhapp",Context.MODE_PRIVATE);
+        if (settings.contains(TAG)) {
+            String jsonFavorites = settings.getString(TAG, null);
+            Gson gson = new Gson();
+            Article[] articleItems = gson.fromJson(jsonFavorites,Article[].class);
+            articles = Arrays.asList(articleItems);
+            articles = new ArrayList(articles);
+        } else
+            return null;
+        return (ArrayList<Article>) articles;
+    }
+    public static void saveBookmarkedArticle(Context context, Article article) {
+        ArrayList<Article> articles = fetchBookmarkedArticles(context);
+        if (articles == null)
+            articles = new ArrayList();
+        articles.add(article);
+        saveArticles(context, articles);
     }
 }

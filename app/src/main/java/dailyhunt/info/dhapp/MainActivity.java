@@ -30,7 +30,7 @@ public class MainActivity extends MaterialNavigationDrawer {
     @Override
     public void init(Bundle savedInstanceState) {
 
-        this.setDrawerHeaderImage(R.drawable.ic_launcher);
+        this.setDrawerHeaderImage(R.drawable.web_hi_res_512);
         this.addSection(this.newSection("Articles", new ArticleListFragment()));
         this.addSection(this.newSection("Bookmarks", new BookmarkedArticleListFragment()));
 

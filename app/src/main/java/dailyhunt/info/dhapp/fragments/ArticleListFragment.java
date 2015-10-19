@@ -122,6 +122,7 @@ public class ArticleListFragment extends Fragment {
         return view;
     }
 
+    // Fetch articles from dh endpoint
     public void fetchArticles(final String category) {
         DHService.fetchArticles(new ArticlesResponseHandler() {
             @Override

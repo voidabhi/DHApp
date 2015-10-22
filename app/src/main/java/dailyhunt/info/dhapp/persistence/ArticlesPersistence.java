@@ -23,7 +23,7 @@ import dailyhunt.info.dhapp.domain.Article;
  */
 public class ArticlesPersistence {
 
-    private static final String TAG = "bookmarked_articles";
+    private static final String BOOKMARKED_ARTICLES_KEY = "bookmarked_articles";
 
     public static void saveArticles(Context context, ArrayList<Article> articles) {
         SharedPreferences settings;
@@ -32,7 +32,7 @@ public class ArticlesPersistence {
         editor = settings.edit();
         Gson gson = new Gson();
         String jsonFavorites = gson.toJson(articles);
-        editor.putString(TAG, jsonFavorites);
+        editor.putString(BOOKMARKED_ARTICLES_KEY, jsonFavorites);
         editor.commit();
     }
 
@@ -40,8 +40,8 @@ public class ArticlesPersistence {
         SharedPreferences settings;
         List<Article> articles;
         settings = context.getSharedPreferences("dhapp",Context.MODE_PRIVATE);
-        if (settings.contains(TAG)) {
-            String jsonFavorites = settings.getString(TAG, null);
+        if (settings.contains(BOOKMARKED_ARTICLES_KEY)) {
+            String jsonFavorites = settings.getString(BOOKMARKED_ARTICLES_KEY, null);
             Gson gson = new Gson();
             Article[] articleItems = gson.fromJson(jsonFavorites,Article[].class);
             articles = Arrays.asList(articleItems);

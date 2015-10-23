@@ -33,14 +33,17 @@ public class DHService {
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    // Fetches Articles
     public static void fetchArticles(ArticlesResponseHandler handler) {
         get(ARTICLES_ENDPOINT, null, handler);
     }
 
+    // Fetches source count
     public static void fetchSourceCount(SourceCountHandler handler) {
         get(ARTICLES_ENDPOINT, null, handler);
     }
 
+    // helper
     private static String getAbsoluteUrl(String relativeUrl) {
         return BASE_URL + relativeUrl;
     }

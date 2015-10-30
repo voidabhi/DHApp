@@ -22,6 +22,7 @@ import dailyhunt.info.dhapp.R;
 import dailyhunt.info.dhapp.adapters.ArticleListAdapter;
 import dailyhunt.info.dhapp.domain.Article;
 import dailyhunt.info.dhapp.persistence.ArticlesPersistence;
+import it.neokree.materialnavigationdrawer.MaterialNavigationDrawer;
 
 /**
  * Created by voidabhi on 18/10/15.
@@ -39,11 +40,23 @@ public class BookmarkedArticleListFragment extends Fragment {
         if (articles!=null) {
             ArticleListAdapter articleListAdapter = new ArticleListAdapter(getActivity(), articles);
             bookmarkedArticlesListView.setAdapter(articleListAdapter);
+
             bookmarkedArticlesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     ArticlesPersistence.removeBookmarkedArticle(getActivity(), articles.get(position));
                     return false;
+                }
+            });
+
+            bookmarkedArticlesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (articles != null && articles.size() > 0) {
+                        PlaceholderFragment fragment = new PlaceholderFragment();
+                        fragment.setArticle(articles.get(position));
+                        ((MaterialNavigationDrawer) getActivity()).setFragmentChild(fragment, articles.get(position).getTitle());
+                    }
                 }
             });
         }

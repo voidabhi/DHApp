@@ -62,9 +62,23 @@ public class ArticleListFragment extends Fragment {
                         }
                     }
 
-                    ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,categoriesList);
+                    ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categoriesList);
                     categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     categories.setAdapter(categoriesAdapter);
+
+//                    categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            ArrayList<Article> categorizedArticles = new ArrayList<Article>();
+//                            for (Article article : articles) {
+//                                if (article.getCategory().equals(categoriesList.get(position))) {
+//                                    categorizedArticles.add(article);
+//                                    articleListAdapter = new ArticleListAdapter(getActivity(), categorizedArticles);
+//                                    articleListView.setAdapter(articleListAdapter);
+//                                }
+//                            }
+//                        }
+//                    });
 
                     articleListAdapter = new ArticleListAdapter(getActivity(), articles);
                     articleListView.setAdapter(articleListAdapter);
@@ -82,17 +96,6 @@ public class ArticleListFragment extends Fragment {
                 }
             }
         });
-
-//        categories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (categoriesList.size()>0) {
-//                    fetchArticles(categoriesList.get(position));
-//                } else {
-//                    fetchArticles(null);
-//                }
-//            }
-//        });
 
         searchEditText.addTextChangedListener(new TextWatcher() {
 

@@ -26,6 +26,7 @@ public class ArticlesPersistence {
     private static final String APP_PREFERENES_KEY = "dhapp";
     private static final String BOOKMARKED_ARTICLES_KEY = "bookmarked_articles";
 
+    // save bookmarked articles
     public static void saveArticles(Context context, ArrayList<Article> articles) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
@@ -37,6 +38,7 @@ public class ArticlesPersistence {
         editor.commit();
     }
 
+    // fetch bookmarked articles
     public static ArrayList fetchBookmarkedArticles(Context context) {
         SharedPreferences settings;
         List<Article> articles;
@@ -51,6 +53,8 @@ public class ArticlesPersistence {
             return null;
         return (ArrayList<Article>) articles;
     }
+    
+    // saving bookmarked article
     public static void saveBookmarkedArticle(Context context, Article article) {
         ArrayList<Article> articles = fetchBookmarkedArticles(context);
         if (articles == null)
@@ -59,6 +63,7 @@ public class ArticlesPersistence {
         saveArticles(context, articles);
     }
 
+    // removing bookmarked article
     public static void removeBookmarkedArticle(Context context, Article article) {
         ArrayList<Article> articles = fetchBookmarkedArticles(context);
         if (articles != null) {
